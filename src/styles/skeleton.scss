@@ -1,0 +1,17 @@
+$background: #f5f5f5;
+$text: #333333;
+$main: #0f4c81;
+$additionally: #ff6f61;
+$accent: #00a8e8;
+
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: $background;
+  margin: 0;
+  width: 100%;
+}
+
+header{
+  background-color: $main;
+}
