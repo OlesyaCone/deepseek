@@ -1,8 +1,15 @@
-<script>
+<script lang="ts">
 import "../styles/chat.scss";
 import axios from "axios";
+import { defineComponent } from "vue";
 
-export default {
+interface Message {
+  text: string;
+  sender: "user" | "other";
+  time: string;
+}
+
+export default defineComponent({
   data() {
     return {
       newMessage: "",
@@ -12,7 +19,7 @@ export default {
           sender: "other",
           time: "10:01",
         },
-      ],
+      ] as Message[],
     };
   },
   methods: {
@@ -20,6 +27,7 @@ export default {
       if (this.newMessage.trim() === "") return;
       console.log("API URL:", import.meta.env.VITE_API_URL);
       console.log("API Key:", import.meta.env.VITE_API_KEY);
+
       this.messages.push({
         text: this.newMessage,
         sender: "user",
@@ -57,7 +65,6 @@ export default {
           }
         );
 
-
         if (
           response.data &&
           response.data.choices &&
@@ -80,17 +87,21 @@ export default {
       } catch (error) {
         console.error("Ошибка при запросе к DeepSeek API:", error);
 
-        if (error.response) {
-          console.error("Данные ответа сервера:", error.response.data);
-          console.error("Статус ошибки:", error.response.status);
-          console.error("Заголовки ответа:", error.response.headers);
-        } else if (error.request) {
-          console.error(
-            "Запрос был отправлен, но ответ не получен:",
-            error.request
-          );
+        if (axios.isAxiosError(error)) {
+          if (error.response) {
+            console.error("Данные ответа сервера:", error.response.data);
+            console.error("Статус ошибки:", error.response.status);
+            console.error("Заголовки ответа:", error.response.headers);
+          } else if (error.request) {
+            console.error(
+              "Запрос был отправлен, но ответ не получен:",
+              error.request
+            );
+          } else {
+            console.error("Ошибка при настройке запроса:", error.message);
+          }
         } else {
-          console.error("Ошибка при настройке запроса:", error.message);
+          console.error("Неизвестная ошибка:", error);
         }
 
         this.messages.push({
@@ -112,7 +123,7 @@ export default {
       });
     },
   },
-};
+});
 </script>
 
 <template>
