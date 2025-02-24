@@ -9,9 +9,14 @@ body {
   font-family: Arial, sans-serif;
   background-color: $background;
   margin: 0;
+  padding: 0;
   width: 100%;
 }
 
 header{
   background-color: $main;
+}
+
+.overflow-hidden {
+  overflow-x: hidden;
 }
